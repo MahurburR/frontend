@@ -1,5 +1,5 @@
 const devConfig = {
-  baseURL: "http://localhost:4000"
+  baseURL: "https://e-comerce.herokuapp.com"
 };
 
 const prodConfig = {
