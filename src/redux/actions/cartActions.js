@@ -1,10 +1,11 @@
 import * as actionTypes from '../constants/cartConstants'
 import axios from 'axios'
-import {Api} from '../../utils/Api'
-import {convertToCartData} from '../../utils/utils.function'
+import { Api } from '../../utils/Api'
+import { convertToCartData } from '../../utils/utils.function'
 
-export const addToCart = (id, qty) => async dispatch => {
-  const {data} = await Api.getRequest(`/api/products/${id}`)
+export const addToCart = (id, qty) => async dispatch =>
+{
+  const { data } = await Api.getRequest(`/api/products/${id}`)
   const product = JSON.parse(data)
   // console.log(product)
   dispatch({
@@ -18,25 +19,29 @@ export const addToCart = (id, qty) => async dispatch => {
       qty,
     },
   })
-
-  Api.postRequest('/api/cart', {productId: id, count: qty})
+  if (id && qty)
+    Api.postRequest('/api/cart', { productId: id, count: qty })
 }
 
 export const removeFromCart =
-  ({pId, _id}) =>
-  dispatch => {
-    dispatch({
-      type: actionTypes.REMOVE_FROM_CART,
-      payload: pId,
-    })
-    Api.DeleteRequest('/api/cart/' + _id)
-  }
+  ({ pId, _id }) =>
+    dispatch =>
+    {
+      dispatch({
+        type: actionTypes.REMOVE_FROM_CART,
+        payload: pId,
+      })
+      if (_id)
+        Api.DeleteRequest('/api/cart/' + _id)
+    }
 
-export const fetchCart = () => async dispatch => {
-  try {
-    const {data: strigifyData} = await Api.getRequest(`/api/cart/`)
+export const fetchCart = () => async dispatch =>
+{
+  try
+  {
+    const { data: strigifyData } = await Api.getRequest(`/api/cart/`)
     // console.log({strigifyData})
-    const {carts} = JSON.parse(strigifyData)
+    const { carts } = JSON.parse(strigifyData)
     // console.log(carts)
 
     dispatch({
@@ -45,7 +50,8 @@ export const fetchCart = () => async dispatch => {
         carts: convertToCartData(carts),
       },
     })
-  } catch (e) {
+  } catch (e)
+  {
     console.log('EROROR :  ', e)
   }
 }
